@@ -7,3 +7,6 @@ __pycache__/
 desktop.ini
 Thumbs.db
 .DS_Store
+
+.vercel
+.env*
