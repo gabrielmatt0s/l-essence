@@ -1,0 +1,2030 @@
+/* =========================================================
+   L'Essence — styles.css
+   Tokens: docs/design-tokens.md · Grid: docs/grid-system.md
+   ========================================================= */
+
+/* General Sans self-hospedada — a API do Fontshare (api.fontshare.com)
+   está com acesso restrito (retorna erro em vez do CSS da fonte), então
+   o body inteiro caía na fonte de fallback do sistema. Arquivos .woff2
+   pendentes em assets/fonts/general-sans/ (ver README nessa pasta).
+   Até os arquivos serem adicionados, estas regras não têm efeito e o
+   fallback (-apple-system, Segoe UI, sans-serif) continua sendo usado. */
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/fonts/general-sans/GeneralSans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'General Sans';
+  src: url('assets/fonts/general-sans/GeneralSans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* --- A. Identidade oficial imutável (docs/design-tokens.md, Parte A) --- */
+  --brand-blush: #EDDFDC;
+  --brand-nude: #D8B3A0;
+  --brand-terracota: #B2644D;
+  --brand-marrom: #54250D;
+  --brand-preto: #000000;
+  --brand-branco: #FFFFFF;
+
+  /* --- B. Tokens funcionais de UI (docs/design-tokens.md, Parte B) --- */
+  --bg-base: #FAF1E8;
+  --bg-base-alt: #F9EFE5;
+  --bg-inverse: var(--brand-marrom);
+  --bg-brand-blush: var(--brand-blush);
+
+  --surface-raised: #F1E7DE;
+  --surface-brand-nude: var(--brand-nude);
+
+  --text-primary: var(--brand-marrom);
+  --text-primary-inverse: var(--brand-branco);
+  --text-secondary: rgba(84, 37, 13, 0.70);
+  --text-secondary-inverse: rgba(255, 255, 255, 0.70);
+
+  --border-hairline: rgba(84, 37, 13, 0.12);
+  --border-hairline-inverse: rgba(255, 255, 255, 0.15);
+
+  --cta-primary-bg: #A95E47;
+  --cta-primary-hover: #9C553E;
+  --cta-primary-text: #FFFFFF;
+
+  --cta-secondary-border: var(--brand-marrom);
+  --cta-secondary-text: var(--brand-marrom);
+
+  --focus-ring: var(--brand-marrom);
+  --focus-ring-inverse: var(--brand-branco);
+
+  /* escala de espaçamento (base 8px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 160px;
+  --space-12: 192px;
+
+  /* grid (docs/grid-system.md) */
+  --container-max: 1440px; /* refinado nesta revisão — era 1200px, ver relatório de auditoria de espaço */
+  --gutter: 24px;
+
+  /* régua horizontal global: margem mínima por lado em telas largas.
+     usado por .container = width: min(calc(100% - 2 * var(--page-gutter)), var(--container-max)) */
+  --page-gutter: 64px; /* desktop muito largo (>=1440px) */
+
+  --radius-sharp: 0px;
+  --radius-soft: 8px;
+
+  --line-hairline: 1px;
+
+  --nav-height: 76px;
+
+  /* tipografia — controlada por variável para permitir substituição futura
+     sem refatoração estrutural. Aprovação atual: Newsreader (display) +
+     General Sans (corpo/interface). */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-body: 'General Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* faixa 1280–1439px (grid-system.md ainda trata como "desktop", só reduz o gutter) */
+@media (max-width: 1439px) {
+  :root {
+    --page-gutter: 48px;
+  }
+}
+
+/* tablet */
+@media (max-width: 1279px) {
+  :root {
+    --gutter: 20px;
+    --page-gutter: 32px;
+  }
+}
+
+/* mobile */
+@media (max-width: 767px) {
+  :root {
+    --gutter: 16px;
+    --page-gutter: 24px;
+    --nav-height: 64px;
+  }
+}
+
+/* =========================================================
+   Reset mínimo
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-weight: 400;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+h1 {
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+/* =========================================================
+   Utilitários
+   ========================================================= */
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  top: -48px;
+  left: var(--space-4);
+  z-index: 100;
+  background: var(--brand-marrom);
+  color: var(--brand-branco);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 500;
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-soft);
+  transition: top 0.15s ease;
+}
+
+.skip-link:focus {
+  top: var(--space-4);
+}
+
+/* Régua horizontal global — TODA seção contida usa esta classe.
+   width:min() já embute a margem mínima (--page-gutter) E o teto de
+   largura (--container-max) numa única regra, sem duplo recuo
+   (evita "max-width + padding-inline" gastando espaço duas vezes). */
+.container {
+  width: min(calc(100% - 2 * var(--page-gutter)), var(--container-max));
+  margin-inline: auto;
+}
+
+/* focus visível em todos os elementos interativos */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--radius-sharp);
+}
+
+/* =========================================================
+   Botões (tokens de CTA)
+   ========================================================= */
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 1;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.button--primary {
+  background: var(--cta-primary-bg);
+  color: var(--cta-primary-text);
+  border-radius: var(--radius-soft);
+  padding: 14px 28px;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.button--primary:hover {
+  background: var(--cta-primary-hover);
+  transform: translateY(-2px);
+}
+
+.button--primary:active {
+  transform: translateY(0);
+  transition-duration: 0.05s;
+}
+
+/* =========================================================
+   Navbar
+   ========================================================= */
+
+.site-header {
+  background: var(--bg-base);
+}
+
+.navbar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--nav-height);
+}
+
+.navbar__brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.navbar__symbol {
+  width: 34px;
+  height: auto;
+}
+
+.navbar__wordmark {
+  width: 118px;
+  height: auto;
+}
+
+.navbar__menu {
+  display: flex;
+  align-items: center;
+  gap: var(--space-8);
+}
+
+.navbar__links {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-7);
+}
+
+.navbar__links a {
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--text-primary);
+  padding: var(--space-2) 0;
+  position: relative;
+}
+
+.navbar__links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1.5px;
+  background: var(--brand-terracota);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.2s ease;
+}
+
+.navbar__links a:hover::after {
+  transform: scaleX(1);
+}
+
+.navbar__cta {
+  padding: 11px 22px;
+  font-size: 14px;
+}
+
+.navbar__toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.navbar__toggle-bar,
+.navbar__toggle-bar::before,
+.navbar__toggle-bar::after {
+  display: block;
+  width: 22px;
+  height: 1.5px;
+  background: var(--brand-marrom);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.navbar__toggle-bar {
+  position: relative;
+}
+
+.navbar__toggle-bar::before,
+.navbar__toggle-bar::after {
+  content: '';
+  position: absolute;
+  left: 0;
+}
+
+.navbar__toggle-bar::before {
+  top: -7px;
+}
+
+.navbar__toggle-bar::after {
+  top: 7px;
+}
+
+.navbar__toggle[aria-expanded="true"] .navbar__toggle-bar {
+  background: transparent;
+}
+
+.navbar__toggle[aria-expanded="true"] .navbar__toggle-bar::before {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.navbar__toggle[aria-expanded="true"] .navbar__toggle-bar::after {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* =========================================================
+   Navbar — menu compacto (hambúrguer)
+   Breakpoint próprio (1023px), mais largo que o breakpoint geral de
+   grid (767px): com 5 links, o menu horizontal centralizado não tem
+   espaço confortável entre logo e CTA antes de ~1024px.
+   ========================================================= */
+
+@media (max-width: 1023px) {
+  .navbar__toggle {
+    display: inline-flex;
+  }
+
+  .navbar__menu {
+    position: fixed;
+    inset: var(--nav-height) 0 0 0;
+    z-index: 90;
+    background: var(--bg-base);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--space-8);
+    padding: var(--space-8) var(--page-gutter);
+    transform: translateY(-8px);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  }
+
+  .navbar__menu.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .navbar__links {
+    position: static;
+    transform: none;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .navbar__links a {
+    font-size: 22px;
+  }
+
+  .navbar__cta {
+    width: 100%;
+    text-align: center;
+    padding: 16px 28px;
+  }
+}
+
+/* =========================================================
+   Navbar — mobile (logo reduzido)
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .navbar__symbol {
+    width: 28px;
+  }
+
+  .navbar__wordmark {
+    width: 96px;
+  }
+}
+
+/* =========================================================
+   Hero
+   ========================================================= */
+
+.hero {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  grid-template-areas:
+    "content visual"
+    "cta     visual";
+  align-items: center;
+  gap: var(--space-8);
+  min-height: calc(100dvh - var(--nav-height));
+  padding-block: var(--space-9) var(--space-8);
+}
+
+.hero__content {
+  grid-area: content;
+  max-width: 640px;
+}
+
+.eyebrow {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-5);
+}
+
+.hero__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(2.5rem, 1.6rem + 3.2vw, 4.5rem);
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+  margin-bottom: var(--space-6);
+}
+
+.hero__subtext {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 46ch;
+  margin-bottom: var(--space-7);
+}
+
+.hero__cta {
+  grid-area: cta;
+  align-self: center;
+  justify-self: start;
+  padding: 16px 32px;
+  font-size: 15px;
+}
+
+.hero__visual {
+  grid-area: visual;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.hero__symbol {
+  width: min(100%, 440px);
+  height: auto;
+  aspect-ratio: 1019 / 845;
+  object-fit: contain;
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+}
+
+/* "BY DRA. VALÉRIA OLIVEIRA" já vem embutida no SVG oficial escolhido
+   (logo-vertical-sem-descritor-principal.svg) -- não duplicar em HTML.
+   Só "CIRURGIÃ-DENTISTA & HOF" precisa existir como texto real. */
+.hero__descriptor-line2 {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(10px, 0.3vw + 8px, 12px);
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  margin: var(--space-4) 0 0;
+  opacity: 0;
+  transform: translateY(16px) scale(0.96);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero__symbol {
+    animation: hero-symbol-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+  }
+
+  .hero__descriptor-line2 {
+    animation: hero-symbol-in 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
+  }
+
+  /* Parallax scroll-driven do wrapper (ver animations.js) -- will-change só
+     entra aqui, junto da própria condição que liga a animação. */
+  .hero__visual {
+    will-change: transform;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__symbol,
+  .hero__descriptor-line2 {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hero-symbol-in {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* =========================================================
+   Hero — tablet
+   ========================================================= */
+
+@media (max-width: 1279px) {
+  .hero {
+    grid-template-columns: 5fr 3fr;
+    gap: var(--space-6);
+  }
+}
+
+/* =========================================================
+   Hero — mobile
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: calc(100dvh - var(--nav-height));
+    padding-block: var(--space-8);
+    gap: var(--space-6);
+  }
+
+  .hero__content {
+    max-width: none;
+  }
+
+  .hero__headline {
+    margin-bottom: var(--space-5);
+  }
+
+  .hero__subtext {
+    max-width: none;
+    margin-bottom: 0;
+  }
+
+  .hero__visual {
+    margin: 0;
+  }
+
+  .hero__symbol {
+    width: min(72%, 280px);
+    margin-inline: auto;
+  }
+
+  .hero__descriptor-line2 {
+    margin-top: var(--space-3);
+  }
+
+  .hero__cta {
+    align-self: center;
+  }
+}
+
+/* =========================================================
+   Placeholder editorial (compartilhado entre Sobre e Serviços)
+   ========================================================= */
+
+.media-placeholder {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-6);
+  text-align: center;
+  background: var(--surface-brand-nude);
+  border: 1px dashed rgba(84, 37, 13, 0.35);
+}
+
+.media-placeholder__label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  opacity: 0.7;
+}
+
+/* =========================================================
+   Sobre a Dra. Valéria
+   ========================================================= */
+
+/* Sobre é uma seção CONTIDA (usa .container no HTML) -- full-bleed deixou
+   de ser o padrão; só seções explicitamente imersivas (Experiência,
+   mapa/localização) rompem o container. */
+.about {
+  background: var(--bg-brand-blush);
+}
+
+.about__inner {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  grid-template-areas:
+    "mosaic intro"
+    "mosaic credentials";
+  align-items: stretch;
+  column-gap: var(--space-8);
+  row-gap: var(--space-6);
+  padding-block: var(--space-9);
+}
+
+/* DOM: intro (eyebrow+headline+texto), mosaico, credenciais -- nessa ordem.
+   Em desktop o mosaico é reposicionado para a coluna esquerda via
+   grid-template-areas (visual apenas; ordem de leitura/DOM permanece
+   eyebrow -> headline -> texto -> mosaico -> credenciais). Em mobile as
+   áreas voltam a empilhar na mesma ordem do DOM. */
+.about__intro {
+  grid-area: intro;
+}
+
+.about__credentials {
+  grid-area: credentials;
+  align-self: start;
+}
+
+.about__mosaic-wrap {
+  grid-area: mosaic;
+  height: 100%;
+}
+
+.about__mosaic {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--space-2);
+  height: 100%;
+  min-height: 420px;
+}
+
+.about__mosaic-item {
+  min-height: 0;
+}
+
+/* Indicador de posição do carrossel mobile (ver media query mobile abaixo);
+   oculto em tablet/desktop, onde o mosaico é a grade estática 2x2. */
+.about__mosaic-dots {
+  display: none;
+}
+
+/* Preparada para as fotografias reais: troque cada div .media-placeholder por
+   <img class="about__photo">, sem reconstruir o mosaico. */
+.about__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.about__eyebrow.eyebrow {
+  color: var(--text-primary);
+  opacity: 0.75;
+}
+
+.about__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.875rem, 1.5rem + 1.8vw, 3rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+  max-width: 32ch;
+  margin-bottom: var(--space-6);
+}
+
+.about__text {
+  color: var(--text-primary);
+  max-width: 70ch;
+}
+
+.about__text p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.about__text p + p {
+  margin-top: var(--space-4);
+}
+
+.about__credentials {
+  border-top: var(--line-hairline) solid var(--border-hairline);
+  max-width: 70ch;
+}
+
+.about__credentials li {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--text-primary);
+  padding: var(--space-3) 0;
+  border-bottom: var(--line-hairline) solid var(--border-hairline);
+}
+
+.about__credentials-lead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 var(--space-3);
+}
+
+.about__credentials-lead span:first-child {
+  font-weight: 500;
+}
+
+.about__credentials-lead span:last-child {
+  color: var(--text-primary);
+  opacity: 0.75;
+}
+
+/* =========================================================
+   Serviços — Estética do Sorriso + Estética Facial
+   ========================================================= */
+
+/* Serviços é uma seção CONTIDA (usa .container, igual Navbar/Hero/Sobre) --
+   diferente de Sobre (blush/delicado), aqui o fundo é bg-base-alt (leve
+   deslocamento tonal em relação ao bg-base do Hero) e o protagonismo é das
+   duas grandes áreas fotográficas do díptico, não de cor de fundo. */
+.services {
+  background: var(--bg-base-alt);
+}
+
+.services__inner {
+  padding-block: var(--space-9);
+}
+
+.services__intro {
+  max-width: 44ch;
+}
+
+.services__eyebrow {
+  margin-bottom: var(--space-4);
+}
+
+.services__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  line-height: 1.2;
+  color: var(--text-primary);
+  max-width: 28ch;
+  margin-bottom: var(--space-4);
+}
+
+.services__intro-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* Split em metades: mídia à esquerda (centralizada), os dois pilares
+   textuais empilhados à direita -- ver relatório desta rodada. */
+.services__split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-8);
+}
+
+/* A tela é dividida ao meio pelo grid 1fr 1fr de .services__split; cada
+   metade centraliza seu próprio conteúdo (texto aqui, foto+legenda em
+   .services__content-col), em vez de ancorar os dois lados um contra o
+   outro -- ver docs/grid-system.md #4 (díptico) e relatório desta rodada. */
+.services__media-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.services__media {
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 4 / 5;
+}
+
+.services__media .media-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+/* Preparada para a fotografia real: troque a div .media-placeholder por
+   <img class="services__photo">, sem reconstruir a seção. */
+.services__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* align-items: center -- centraliza o post (e os controles abaixo dele,
+   que têm a mesma largura travada em min(420px, 100%)) dentro de toda a
+   largura desta metade da tela. */
+.services__content-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+/* Carrossel de 1 "post" por vez: os dois pilares (Sorriso/Facial) vivem no
+   mesmo cartão, alternando por swipe (touch/trackpad) ou pelos controles de
+   seta/pontos abaixo (fora da foto, ver .services__pillars-controls).
+   Formato editorial no estilo post do Instagram: foto quadrada em cima,
+   legenda em baixo, largura própria centralizada dentro da coluna (não
+   esticada) -- por isso o texto usa os tokens de leitura normais, não os
+   -inverse. */
+.services__pillars-wrap {
+  width: min(420px, 100%);
+}
+
+.services__pillars {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.services__pillars::-webkit-scrollbar {
+  display: none;
+}
+
+.services__pillar-content {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  justify-content: center;
+}
+
+.services__post {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.services__media--secondary {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  max-width: none;
+  flex: 0 0 auto;
+}
+
+.services__pillar-copy {
+  padding: var(--space-3) 0 0;
+  flex: 0 0 auto;
+}
+
+.services__pillar-title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.375rem, 1.15rem + 0.8vw, 1.75rem);
+  color: var(--text-primary);
+  margin-bottom: var(--space-2);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--brand-terracota);
+  display: inline-block;
+}
+
+.services__pillar-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 42ch;
+  margin-bottom: var(--space-4);
+}
+
+.services__procedures {
+  border-top: var(--line-hairline) solid var(--border-hairline);
+  max-width: 42ch;
+}
+
+.services__procedures li {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  opacity: 0.85;
+  padding: var(--space-3) 0;
+  border-bottom: var(--line-hairline) solid var(--border-hairline);
+}
+
+/* Controles de navegação: seta + pontos vivem numa barra abaixo do post,
+   fora da foto (não mais sobrepostos a ela). Mesma largura travada do post
+   (min(420px, 100%)) para alinhar sob a foto/legenda. */
+.services__pillars-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  width: min(420px, 100%);
+}
+
+.services__pillars-arrow {
+  appearance: none;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: var(--brand-marrom);
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  font-family: var(--font-display);
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--text-primary-inverse);
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.services__pillars-arrow:hover {
+  opacity: 0.7;
+}
+
+.services__pillars-arrow:focus-visible {
+  outline-color: var(--brand-marrom);
+}
+
+.services__pillars-arrow[hidden] {
+  display: none;
+}
+
+.services__pillars-dots {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+/* Botão com área de toque ~44x44 (margem negativa compensa o layout, ver
+   docs/design-tokens.md); o círculo visível continua 6px via ::before,
+   sem alterar a aparência. */
+.services__pillars-dot {
+  appearance: none;
+  width: 44px;
+  height: 44px;
+  margin: -19px;
+  border-radius: 50%;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.services__pillars-dot::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-primary);
+  opacity: 0.25;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.services__pillars-dot:focus-visible {
+  outline-color: var(--text-primary);
+}
+
+.services__pillars-dot.is-active::before {
+  opacity: 0.9;
+  transform: scale(1.25);
+}
+
+/* Dica de swipe: só existe no mobile, onde o gesto substitui a seta (ver
+   regra que esconde .services__pillars-arrow em max-width:767). No
+   desktop/tablet a seta clicável já é a affordance, então o texto fica
+   oculto para não duplicar a mensagem. */
+.services__swipe-hint {
+  display: none;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--text-secondary);
+  padding-top: var(--space-3);
+  width: min(420px, 100%);
+}
+
+/* =========================================================
+   Serviços — tablet retrato+ e desktop
+   ========================================================= */
+
+/* O post tem altura própria (foto quadrada + legenda), então a seção só
+   precisa de espaço mínimo para centralizá-lo verticalmente -- sem travar
+   a altura do card a vh, o que voltaria a espremer/esticar a legenda. */
+@media (min-width: 768px) {
+  .services {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+  }
+
+  .services__inner {
+    padding-block: var(--space-5);
+  }
+
+  .services__headline {
+    font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem);
+    margin-bottom: var(--space-3);
+  }
+
+  .services__pillar-title {
+    font-size: clamp(1.25rem, 1.05rem + 0.6vw, 1.5rem);
+    margin-bottom: var(--space-1);
+    padding-bottom: var(--space-1);
+  }
+
+  .services__pillar-text {
+    line-height: 1.5;
+    max-width: 56ch;
+    margin-bottom: var(--space-1);
+  }
+
+  .services__procedures {
+    max-width: 56ch;
+  }
+
+  .services__procedures li {
+    padding: var(--space-1) 0;
+  }
+}
+
+/* Sobre preenche uma tela cheia, alinhada ao mesmo padrão de Hero/Serviços:
+   min-height de viewport + centralização vertical do conteúdo. Em mobile o
+   conteúdo (mosaico + texto) normalmente excede uma tela, então a seção
+   volta a ter altura livre (ver media query mobile abaixo). */
+@media (min-width: 768px) {
+  .about {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* Desktop: a seção deve caber em exatamente uma tela, sem overflow —
+   diferente do min-height (piso) usado no tablet, aqui é altura travada. */
+@media (min-width: 1280px) {
+  .about {
+    height: 100dvh;
+  }
+
+  .about__inner {
+    height: 100%;
+    grid-template-rows: min-content 1fr;
+    padding-block: var(--space-7);
+  }
+}
+
+/* =========================================================
+   Sobre / Serviços — tablet
+   ========================================================= */
+
+@media (max-width: 1279px) {
+  .about__inner {
+    column-gap: var(--space-6);
+    row-gap: var(--space-5);
+  }
+
+  .about__mosaic {
+    min-height: 360px;
+  }
+
+  .services__split {
+    gap: var(--space-6);
+  }
+}
+
+/* =========================================================
+   Sobre / Serviços — mobile
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .about {
+    min-height: auto;
+  }
+
+  .about__inner {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "intro"
+      "mosaic"
+      "credentials";
+    padding-block: var(--space-8);
+    row-gap: var(--space-6);
+  }
+
+  .about__mosaic-wrap {
+    height: auto;
+    min-width: 0;
+  }
+
+  /* Mobile: mosaico vira carrossel horizontal (uma foto por vez, swipe +
+     pontos), em vez da grade 2x2 do tablet/desktop. */
+  .about__mosaic {
+    display: flex;
+    flex-direction: row;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    height: auto;
+    gap: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .about__mosaic::-webkit-scrollbar {
+    display: none;
+  }
+
+  .about__mosaic-item {
+    flex: 0 0 100%;
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    overflow: hidden;
+  }
+
+  /* Retrato usado no card 2 do carrossel: o crop 4/5 sobrava demais na
+     altura da perna/banquinho. Object-position sozinho já estava no
+     limite (topo da imagem original); o zoom aproxima o enquadramento
+     do busto/rosto, cortando o excesso abaixo do quadril. */
+  .about__photo--valeria-portrait {
+    transform: scale(1.35);
+    transform-origin: center top;
+  }
+
+  .about__mosaic-dots {
+    display: flex;
+    justify-content: center;
+    gap: var(--space-2);
+    padding-top: var(--space-3);
+  }
+
+  .about__mosaic-dot {
+    appearance: none;
+    width: 44px;
+    height: 44px;
+    margin: -19px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about__mosaic-dot::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-primary);
+    opacity: 0.25;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .about__mosaic-dot:focus-visible {
+    outline-color: var(--text-primary);
+  }
+
+  .about__mosaic-dot.is-active::before {
+    opacity: 0.9;
+    transform: scale(1.25);
+  }
+
+  .about__headline {
+    max-width: none;
+  }
+
+  .about__text,
+  .about__credentials {
+    max-width: none;
+  }
+
+  .services__inner {
+    padding-block: var(--space-8);
+  }
+
+  .services__intro {
+    max-width: none;
+  }
+
+  .services__headline {
+    max-width: none;
+  }
+
+  .services__split {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .services__pillars {
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .services__pillar-content {
+    flex: 0 0 auto;
+    scroll-snap-align: none;
+  }
+
+  .services__pillar-text,
+  .services__procedures {
+    max-width: none;
+  }
+
+  .services__pillars-controls {
+    display: none;
+  }
+}
+
+/* =========================================================
+   Experiência L'Essence — seção contida, clara e compacta
+   (revisada: fundo escuro/full-bleed removido, ver relatório desta rodada)
+   ========================================================= */
+
+.experience {
+  background: var(--bg-brand-blush);
+}
+
+.experience__inner {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  grid-template-areas:
+    "content media"
+    "concepts concepts";
+  column-gap: var(--space-8);
+  row-gap: var(--space-6);
+  align-items: center;
+  padding-block: 72px;
+}
+
+.experience__content {
+  grid-area: content;
+}
+
+.experience__media {
+  grid-area: media;
+  aspect-ratio: 16 / 10;
+}
+
+.experience__media .media-placeholder {
+  width: 100%;
+  height: 100%;
+}
+
+/* Preparada para a fotografia real: troque a div .media-placeholder por
+   <img class="experience__photo">. object-position é o único ajuste
+   necessário depois, sem reconstruir a seção. */
+.experience__photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.experience__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.875rem, 1.5rem + 1.4vw, 2.5rem);
+  line-height: 1.2;
+  color: var(--text-primary);
+  max-width: 15ch;
+  margin-bottom: var(--space-5);
+}
+
+.experience__text {
+  max-width: 42ch;
+}
+
+.experience__text p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+}
+
+.experience__text p + p {
+  margin-top: var(--space-3);
+}
+
+.experience__concepts {
+  grid-area: concepts;
+  display: flex;
+  gap: var(--space-7);
+}
+
+.experience__concept {
+  flex: 1;
+  padding-left: var(--space-5);
+  border-left: var(--line-hairline) solid var(--border-hairline);
+}
+
+.experience__concept:first-child {
+  padding-left: 0;
+  border-left: none;
+}
+
+.experience__concept-label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+  padding-bottom: var(--space-2);
+  margin-bottom: var(--space-2);
+  border-bottom: 2px solid var(--brand-terracota);
+  display: inline-block;
+}
+
+.experience__concept-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text-primary);
+}
+
+/* Experiência preenche uma tela cheia, mesmo padrão de Hero/Sobre/Serviços. */
+@media (min-width: 768px) {
+  .experience {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* =========================================================
+   Experiência L'Essence — tablet
+   ========================================================= */
+
+@media (max-width: 1279px) {
+  .experience__inner {
+    column-gap: var(--space-6);
+    row-gap: var(--space-5);
+    padding-block: var(--space-8);
+  }
+
+  .experience__concepts {
+    gap: var(--space-5);
+  }
+}
+
+/* =========================================================
+   Experiência L'Essence — mobile
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .experience {
+    min-height: auto;
+  }
+
+  .experience__inner {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "content"
+      "media"
+      "concepts";
+    padding-block: var(--space-7);
+    row-gap: var(--space-6);
+  }
+
+  .experience__headline {
+    max-width: none;
+  }
+
+  .experience__text {
+    max-width: none;
+  }
+
+  .experience__media {
+    aspect-ratio: 4 / 3;
+  }
+
+  .experience__concepts {
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  .experience__concept {
+    padding-left: 0;
+    border-left: none;
+  }
+}
+
+/* =========================================================
+   Prova Social — stack editorial de depoimentos (6/12 + 3/12 + 3/12)
+   ========================================================= */
+
+.testimonials {
+  background: var(--bg-base);
+}
+
+.testimonials__inner {
+  padding-block: var(--space-7);
+}
+
+.testimonials__intro {
+  max-width: 46ch;
+  margin-bottom: var(--space-7);
+}
+
+.testimonials__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  line-height: 1.2;
+  color: var(--text-primary);
+  max-width: 20ch;
+  margin-bottom: var(--space-4);
+}
+
+.testimonials__intro-text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.testimonials__source-note {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--text-secondary);
+  margin-top: var(--space-3);
+}
+
+.testimonials__grid {
+  display: grid;
+  grid-template-columns: 6fr 3fr 3fr;
+  grid-template-areas: "featured second third";
+  column-gap: var(--space-8);
+}
+
+.testimonial {
+  margin: 0;
+}
+
+.testimonial--featured {
+  grid-area: featured;
+}
+
+.testimonial--second {
+  grid-area: second;
+  padding-left: var(--space-6);
+  border-left: var(--line-hairline) solid var(--border-hairline);
+}
+
+.testimonial--third {
+  grid-area: third;
+  padding-left: var(--space-6);
+  border-left: var(--line-hairline) solid var(--border-hairline);
+}
+
+.testimonial__quote {
+  position: relative;
+  margin: 0 0 var(--space-5);
+}
+
+.testimonial--featured .testimonial__quote {
+  padding-top: var(--space-6);
+}
+
+.testimonial--featured .testimonial__quote::before {
+  content: "\201C";
+  position: absolute;
+  top: -0.5rem;
+  left: -0.1rem;
+  font-family: var(--font-display);
+  font-size: 5.5rem;
+  font-weight: 500;
+  line-height: 1;
+  color: rgba(178, 100, 77, 0.18);
+  pointer-events: none;
+}
+
+.testimonial--featured .testimonial__quote p {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.375rem, 1.15rem + 1vw, 1.75rem);
+  line-height: 1.45;
+  color: var(--text-primary);
+  max-width: 36ch;
+  margin: 0;
+}
+
+.testimonial--second .testimonial__quote p,
+.testimonial--third .testimonial__quote p {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.testimonial__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.testimonial__name {
+  font-family: var(--font-body);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+
+.testimonial__name::before {
+  content: "\2014  ";
+  color: var(--text-secondary);
+}
+
+/* Prova Social preenche uma tela cheia, mesmo padrão de Hero/Sobre/Serviços. */
+@media (min-width: 768px) {
+  .testimonials {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* =========================================================
+   Prova Social — tablet
+   ========================================================= */
+
+@media (max-width: 1279px) {
+  .testimonials__inner {
+    padding-block: var(--space-8);
+  }
+
+  .testimonials__grid {
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "featured featured"
+      "second third";
+    column-gap: var(--space-6);
+    row-gap: var(--space-7);
+  }
+
+  .testimonial--featured {
+    padding-bottom: var(--space-7);
+    border-bottom: var(--line-hairline) solid var(--border-hairline);
+  }
+
+  .testimonial--featured .testimonial__quote p {
+    max-width: 56ch;
+  }
+
+  .testimonial--second {
+    padding-left: 0;
+    padding-right: var(--space-6);
+    border-left: none;
+  }
+}
+
+/* =========================================================
+   Prova Social — mobile
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .testimonials {
+    min-height: auto;
+  }
+
+  .testimonials__intro {
+    max-width: none;
+  }
+
+  .testimonials__headline {
+    max-width: none;
+  }
+
+  .testimonials__grid {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "featured"
+      "second"
+      "third";
+    row-gap: var(--space-6);
+  }
+
+  .testimonial--featured {
+    padding-bottom: var(--space-6);
+    border-bottom: var(--line-hairline) solid var(--border-hairline);
+  }
+
+  .testimonial--featured .testimonial__quote p {
+    max-width: none;
+  }
+
+  .testimonial--featured .testimonial__quote::before {
+    font-size: 4rem;
+  }
+
+  .testimonial--second,
+  .testimonial--third {
+    padding-left: 0;
+    padding-top: var(--space-6);
+    border-left: none;
+    border-top: var(--line-hairline) solid var(--border-hairline);
+  }
+}
+
+/* =========================================================
+   Localização + CTA final — split contido (5/12 + 7/12,
+   totalmente dentro do container global; mapa como apoio
+   visual compacto, não em tela cheia)
+   ========================================================= */
+
+.location {
+  background: var(--bg-base-alt);
+}
+
+.location__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  column-gap: var(--space-8);
+  padding-block: 72px;
+}
+
+.location__content {
+  /* bloco simples (não-flex): evita que o CTA herde stretch de eixo
+     cruzado e vire full-width -- cada filho fica com sua largura natural. */
+}
+
+.location__label {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+}
+
+.location__headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(1.875rem, 1.5rem + 1.6vw, 2.75rem);
+  line-height: 1.2;
+  color: var(--text-primary);
+  max-width: 16ch;
+  margin-bottom: var(--space-4);
+}
+
+.location__text {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 40ch;
+  margin-bottom: var(--space-4);
+}
+
+.location__address {
+  font-style: normal;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-5);
+}
+
+.location__map-embed {
+  display: block;
+  width: 100%;
+  height: 450px;
+  border: var(--line-hairline) solid var(--border-hairline);
+  border-radius: var(--radius-sharp);
+}
+
+/* Localização preenche uma tela cheia, mesmo padrão de Hero/Sobre/Serviços. */
+@media (min-width: 768px) {
+  .location {
+    min-height: 100dvh;
+    display: flex;
+    align-items: center;
+  }
+}
+
+/* =========================================================
+   Localização + CTA final — tablet
+   ========================================================= */
+
+@media (max-width: 1279px) {
+  .location__inner {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 5fr);
+    column-gap: var(--space-6);
+  }
+
+  .location__headline {
+    max-width: none;
+  }
+
+  .location__map-embed {
+    height: 400px;
+  }
+}
+
+/* =========================================================
+   Localização + CTA final — mobile
+   (ordem: label, headline, texto, endereço, CTA, mapa)
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .location {
+    min-height: auto;
+  }
+
+  .location__inner {
+    display: block;
+    padding-block: var(--space-8) var(--space-7);
+  }
+
+  .location__headline,
+  .location__text {
+    max-width: none;
+  }
+
+  .location__map {
+    margin-top: var(--space-6);
+  }
+
+  .location__map-embed {
+    height: 340px;
+  }
+}
+
+/* =========================================================
+   Footer — encerramento institucional compacto, claro e horizontal
+   ========================================================= */
+
+.site-footer {
+  background: var(--bg-base-alt);
+}
+
+.site-footer__inner {
+  padding-block: 40px 24px;
+}
+
+.site-footer__top {
+  display: grid;
+  grid-template-columns: 4fr 3fr 5fr;
+  gap: var(--space-7);
+  margin-bottom: var(--space-5);
+}
+
+.site-footer__logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.site-footer__symbol {
+  width: auto;
+  height: 52px;
+}
+
+.site-footer__wordmark {
+  width: 210px;
+  height: auto;
+}
+
+.site-footer__col-title {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-3);
+}
+
+.site-footer__nav ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.site-footer__nav a {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  text-decoration: none;
+  color: var(--text-primary);
+  transition: opacity 0.2s ease;
+}
+
+.site-footer__nav a:hover {
+  opacity: 0.65;
+}
+
+.site-footer__address {
+  font-style: normal;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-4);
+}
+
+/* Botões de ícone (WhatsApp / Instagram): contorno hairline discreto, sem
+   preenchimento de marca -- consistente com o restante do site (bordas
+   finas, sem pills/gradientes). Ícones de plataforma de terceiros, não
+   fazem parte da identidade oficial da L'Essence. */
+.site-footer__social {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.site-footer__social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: var(--line-hairline) solid var(--border-hairline);
+  border-radius: 50%;
+  color: var(--text-primary);
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.site-footer__social-link svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.site-footer__social-link:hover {
+  background: var(--brand-marrom);
+  border-color: var(--brand-marrom);
+  color: var(--brand-branco);
+}
+
+.site-footer__bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-top: var(--space-3);
+  border-top: var(--line-hairline) solid var(--border-hairline);
+}
+
+.site-footer__legal,
+.site-footer__copyright {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* =========================================================
+   Footer — tablet
+   ========================================================= */
+
+@media (max-width: 1279px) {
+  .site-footer__top {
+    grid-template-columns: 1fr 1fr;
+    column-gap: var(--space-7);
+    row-gap: var(--space-6);
+  }
+
+  .site-footer__brand {
+    grid-column: 1 / -1;
+  }
+}
+
+/* =========================================================
+   Footer — mobile
+   ========================================================= */
+
+@media (max-width: 767px) {
+  .site-footer__inner {
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .site-footer__top {
+    grid-template-columns: 1fr;
+    row-gap: var(--space-6);
+    margin-bottom: var(--space-5);
+  }
+
+  .site-footer__brand {
+    grid-column: auto;
+  }
+
+  .site-footer__symbol {
+    height: 44px;
+  }
+
+  .site-footer__wordmark {
+    width: 180px;
+  }
+
+  .site-footer__bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+  }
+}

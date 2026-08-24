@@ -1,0 +1,13 @@
+{
+  "version": "FINAL-v2-curvas-lisas",
+  "reference": "00_master_simbolo/REFERENCIA_MESTRA_USUARIO.png",
+  "curve_type": "cubic Bezier",
+  "symbol_geometry_shared_by_all_logos": true,
+  "surgical_corrections": [
+    "top_inner_transition",
+    "lower_left_profile_curve"
+  ],
+  "updated_svg_count": 29,
+  "master_sha256": "33a8932ff6650e513875d4e653e35cd4ad171d7cb1f6a410cc807ae52da915c8",
+  "note": "Local Bézier corrections only; remaining approved geometry preserved."
+}

@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Sitemap: PENDENTE — adicionar a URL do sitemap.xml somente quando o
+# domínio oficial de produção estiver confirmado (ver index.html, comentário
+# CANONICAL PENDENTE, e docs/design-tokens.md para o restante da auditoria
+# de SEO/GEO desta etapa).

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>L'Essence — Laboratório tipográfico (protótipo local, não é o site)</title>
+
+<!-- Fontshare: General Sans (corpo/interface, fixo em todas as opções) -->
+<link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=general-sans@400,500,600&display=swap">
+
+<!-- Google Fonts: Ogg (candidata D — embed real e gratuito) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ogg:wght@400;500&family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Lora:wght@400;500&family=Domine:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    /* === tokens de docs/design-tokens.md === */
+    --bg-base: #FAF1E8;
+    --bg-base-alt: #F9EFE5;
+    --text-primary: #54250D;
+    --text-secondary: rgba(84, 37, 13, 0.70);
+    --border-hairline: rgba(84, 37, 13, 0.12);
+    --cta-primary-bg: #A95E47;
+    --cta-primary-hover: #9C553E;
+    --cta-primary-text: #FFFFFF;
+    --radius-sharp: 0px;
+    --radius-soft: 2px;
+    --line-hairline: 1px;
+
+    /* === grid de docs/grid-system.md === */
+    --container-max: 1200px;
+    --margin-lateral: 64px;
+
+    /* === corpo/interface fixo (General Sans) === */
+    --font-body: 'General Sans', -apple-system, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+  }
+
+  .lab-header {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 48px var(--margin-lateral) 24px;
+    border-bottom: var(--line-hairline) solid var(--border-hairline);
+  }
+
+  .lab-header h1 {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 8px;
+  }
+
+  .lab-header p {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 14px;
+    color: var(--text-secondary);
+    max-width: 65ch;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .disclaimer {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 4px 10px;
+    background: var(--bg-base-alt);
+    border: var(--line-hairline) solid var(--border-hairline);
+    border-radius: var(--radius-sharp);
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* ===== bloco de especime (mesma estrutura para as 4 candidatas) ===== */
+  .specimen {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 64px var(--margin-lateral);
+    border-bottom: var(--line-hairline) solid var(--border-hairline);
+  }
+
+  .specimen:nth-child(even) {
+    background: var(--bg-base-alt);
+  }
+
+  .specimen__label {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 40px;
+  }
+
+  .specimen__index {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--text-secondary);
+  }
+
+  .specimen__name {
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 16px;
+  }
+
+  .specimen__meta {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .specimen__body {
+    max-width: 720px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+    margin: 0 0 20px;
+  }
+
+  .headline {
+    font-family: var(--font-display, serif);
+    font-weight: 500;
+    font-size: 56px;
+    line-height: 1.08;
+    letter-spacing: -0.01em;
+    margin: 0 0 28px;
+  }
+
+  .subtext {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--text-secondary);
+    max-width: 52ch;
+    margin: 0 0 32px;
+  }
+
+  .cta-button {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 15px;
+    color: var(--cta-primary-text);
+    background: var(--cta-primary-bg);
+    border: none;
+    border-radius: var(--radius-soft);
+    padding: 14px 28px;
+    cursor: default;
+  }
+
+  .section-samples {
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: var(--line-hairline) solid var(--border-hairline);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px 48px;
+  }
+
+  .section-samples h2 {
+    font-family: var(--font-display, serif);
+    font-weight: 500;
+    font-size: 26px;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  @media (max-width: 768px) {
+    .lab-header, .specimen { padding-left: 24px; padding-right: 24px; }
+    .headline { font-size: 38px; }
+    .section-samples { grid-template-columns: 1fr; gap: 20px; }
+  }
+</style>
+</head>
+<body>
+
+  <header class="lab-header">
+    <h1>Laboratório tipográfico — L'Essence (protótipo local)</h1>
+    <p>Este arquivo não é parte do site de produção. Serve apenas para comparação visual das 4 candidatas a fonte display, lado a lado, com o mesmo texto, tamanho, line-height e largura. Corpo/interface fixo em General Sans em todas as opções — apenas a fonte display varia entre os blocos. Cores e espaçamento seguem <code>docs/design-tokens.md</code>; largura de container segue <code>docs/grid-system.md</code>.</p>
+    <span class="disclaimer">Candidatas A, B e C (GT Sectra Display, Canela, Reckless Neue) são tipos comerciais licenciados por fundições independentes — este protótipo local não pode embutir os arquivos originais sem licença adquirida. Os blocos A, B e C usam uma fonte gratuita estruturalmente próxima apenas como referência de ritmo/tamanho, claramente identificada em cada bloco. A candidata D (Ogg) está com a fonte real, via Google Fonts.</span>
+  </header>
+
+  <!-- ============ CANDIDATA A — GT Sectra Display ============ -->
+  <section class="specimen" style="--font-display: 'Newsreader', serif;">
+    <div class="specimen__label">
+      <span class="specimen__index">A</span>
+      <span class="specimen__name">GT Sectra Display</span>
+      <span class="specimen__meta">— placeholder estrutural: Newsreader (Google Fonts). Fonte real é comercial (Grilli Type), não embutida aqui.</span>
+    </div>
+    <div class="specimen__body">
+      <p class="eyebrow">L'ESSENCE · BATEL</p>
+      <h2 class="headline">Realce sua beleza<br>sem perder<br>sua essência.</h2>
+      <p class="subtext">Odontologia estética e harmonização com naturalidade, precisão e cuidado.</p>
+      <span class="cta-button">Agendar atendimento</span>
+    </div>
+    <div class="section-samples">
+      <h2>Estética do Sorriso</h2>
+      <h2>Estética Facial</h2>
+      <h2>Sobre a Dra. Valéria</h2>
+      <h2>Experiência L'Essence</h2>
+    </div>
+  </section>
+
+  <!-- ============ CANDIDATA B — Canela ============ -->
+  <section class="specimen" style="--font-display: 'Lora', serif;">
+    <div class="specimen__label">
+      <span class="specimen__index">B</span>
+      <span class="specimen__name">Canela</span>
+      <span class="specimen__meta">— placeholder estrutural: Lora (Google Fonts). Fonte real é comercial (Commercial Type), não embutida aqui.</span>
+    </div>
+    <div class="specimen__body">
+      <p class="eyebrow">L'ESSENCE · BATEL</p>
+      <h2 class="headline">Realce sua beleza<br>sem perder<br>sua essência.</h2>
+      <p class="subtext">Odontologia estética e harmonização com naturalidade, precisão e cuidado.</p>
+      <span class="cta-button">Agendar atendimento</span>
+    </div>
+    <div class="section-samples">
+      <h2>Estética do Sorriso</h2>
+      <h2>Estética Facial</h2>
+      <h2>Sobre a Dra. Valéria</h2>
+      <h2>Experiência L'Essence</h2>
+    </div>
+  </section>
+
+  <!-- ============ CANDIDATA C — Reckless Neue ============ -->
+  <section class="specimen" style="--font-display: 'Domine', serif;">
+    <div class="specimen__label">
+      <span class="specimen__index">C</span>
+      <span class="specimen__name">Reckless Neue</span>
+      <span class="specimen__meta">— placeholder estrutural: Domine (Google Fonts). Fonte real é comercial (OhNo Type Co.), não embutida aqui.</span>
+    </div>
+    <div class="specimen__body">
+      <p class="eyebrow">L'ESSENCE · BATEL</p>
+      <h2 class="headline">Realce sua beleza<br>sem perder<br>sua essência.</h2>
+      <p class="subtext">Odontologia estética e harmonização com naturalidade, precisão e cuidado.</p>
+      <span class="cta-button">Agendar atendimento</span>
+    </div>
+    <div class="section-samples">
+      <h2>Estética do Sorriso</h2>
+      <h2>Estética Facial</h2>
+      <h2>Sobre a Dra. Valéria</h2>
+      <h2>Experiência L'Essence</h2>
+    </div>
+  </section>
+
+  <!-- ============ CANDIDATA D — Ogg ============ -->
+  <section class="specimen" style="--font-display: 'Ogg', serif;">
+    <div class="specimen__label">
+      <span class="specimen__index">D</span>
+      <span class="specimen__name">Ogg</span>
+      <span class="specimen__meta">— fonte real embutida (Google Fonts, gratuita).</span>
+    </div>
+    <div class="specimen__body">
+      <p class="eyebrow">L'ESSENCE · BATEL</p>
+      <h2 class="headline">Realce sua beleza<br>sem perder<br>sua essência.</h2>
+      <p class="subtext">Odontologia estética e harmonização com naturalidade, precisão e cuidado.</p>
+      <span class="cta-button">Agendar atendimento</span>
+    </div>
+    <div class="section-samples">
+      <h2>Estética do Sorriso</h2>
+      <h2>Estética Facial</h2>
+      <h2>Sobre a Dra. Valéria</h2>
+      <h2>Experiência L'Essence</h2>
+    </div>
+  </section>
+
+</body>
+</html>

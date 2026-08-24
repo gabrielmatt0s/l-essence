@@ -1,0 +1,13 @@
+{
+  "reference_size": [
+    604,
+    445
+  ],
+  "core_iso_saturation": 105.0,
+  "curve_type": "true cubic Bezier",
+  "cubic_segments": 214,
+  "mean_boundary_distance_px": 0.5676,
+  "p95_boundary_distance_px": 1.0,
+  "iou_vs_core_mask": 0.849283,
+  "note": "Validation is against a reproducible extraction of the visible gold core from the supplied raster image; the unavailable designer source vector cannot be recovered mathematically from a PNG."
+}

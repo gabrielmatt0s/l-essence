@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Validação — correção do lettering do descritor (protótipo, não é o site)</title>
+<style>
+  body { margin: 0; font-family: -apple-system, sans-serif; background: #fff; }
+  h1 { font-size: 16px; padding: 16px 24px 4px; }
+  h2.section { font-size: 14px; padding: 24px 24px 8px; border-top: 4px solid #eee; margin-top: 24px; }
+  p.note { font-size: 13px; color: #666; padding: 0 24px 8px; max-width: 90ch; }
+
+  .zoomrow { display: flex; gap: 24px; padding: 8px 24px 32px; overflow-x: auto; align-items: flex-end; }
+  .zoomcell { text-align: center; flex-shrink: 0; }
+  .zoomcell span { display: block; font-size: 11px; color: #999; margin-bottom: 6px; }
+  .zoomcell img { display: block; border: 1px solid #eee; }
+
+  .cropwrap { display: flex; }
+  .croppanel { padding: 20px; }
+  .croppanel.light { background: #FAF1E8; }
+  .croppanel.dark { background: #1a1a1a; } /* neutro so para teste de contraste visual neste protótipo; a cor de marca sobre fundo escuro usa a variante branca do asset, fora de escopo aqui */
+  .croppanel h3 { font-size: 12px; color: #999; margin: 0 0 10px; }
+  .croppanel.dark h3 { color: #cbb; }
+  object.crop { display: block; border: none; }
+</style>
+</head>
+<body>
+
+<h1>Validação — correção do lettering do descritor · logo-vertical-completo-principal.svg</h1>
+<p class="note">Protótipo local, fora do site. Só "BY DRA. VALÉRIA OLIVEIRA" e "CIRURGIÃ-DENTISTA &amp; HOF" foram alterados; símbolo e "L'ESSENCE" são byte-idênticos ao original em ambas as versões.</p>
+
+<h2 class="section">A. Logo completo — 1x / 2x / 4x / 8x (ANTES vs DEPOIS)</h2>
+<div class="zoomrow" id="row-antes">
+  <div class="zoomcell"><span>ANTES · 1x (300px)</span><img src="logo-vertical-completo-principal.ORIGINAL.svg" width="300"></div>
+  <div class="zoomcell"><span>ANTES · 2x (600px)</span><img src="logo-vertical-completo-principal.ORIGINAL.svg" width="600"></div>
+</div>
+<div class="zoomrow" id="row-antes2">
+  <div class="zoomcell"><span>ANTES · 4x (1200px)</span><img src="logo-vertical-completo-principal.ORIGINAL.svg" width="1200"></div>
+</div>
+<div class="zoomrow" id="row-antes3">
+  <div class="zoomcell"><span>ANTES · 8x (2400px)</span><img src="logo-vertical-completo-principal.ORIGINAL.svg" width="2400"></div>
+</div>
+
+<div class="zoomrow" id="row-depois">
+  <div class="zoomcell"><span>DEPOIS · 1x (300px)</span><img src="logo-vertical-completo-principal.CORRECTED.svg" width="300"></div>
+  <div class="zoomcell"><span>DEPOIS · 2x (600px)</span><img src="logo-vertical-completo-principal.CORRECTED.svg" width="600"></div>
+</div>
+<div class="zoomrow" id="row-depois2">
+  <div class="zoomcell"><span>DEPOIS · 4x (1200px)</span><img src="logo-vertical-completo-principal.CORRECTED.svg" width="1200"></div>
+</div>
+<div class="zoomrow" id="row-depois3">
+  <div class="zoomcell"><span>DEPOIS · 8x (2400px)</span><img src="logo-vertical-completo-principal.CORRECTED.svg" width="2400"></div>
+</div>
+
+<h2 class="section">B. Crop ampliado — "BY DRA. VALÉRIA OLIVEIRA"</h2>
+<div class="cropwrap">
+  <div class="croppanel light"><h3>ANTES · fundo claro</h3><object class="crop" data="logo-vertical-completo-principal.ORIGINAL.svg" type="image/svg+xml" id="crop-line1-before-light" width="1500" height="126"></object></div>
+  <div class="croppanel light"><h3>DEPOIS · fundo claro</h3><object class="crop" data="logo-vertical-completo-principal.CORRECTED.svg" type="image/svg+xml" id="crop-line1-after-light" width="1500" height="126"></object></div>
+</div>
+<div class="cropwrap">
+  <div class="croppanel dark"><h3>ANTES · fundo escuro</h3><object class="crop" data="logo-vertical-completo-principal.ORIGINAL.svg" type="image/svg+xml" id="crop-line1-before-dark" width="1500" height="126"></object></div>
+  <div class="croppanel dark"><h3>DEPOIS · fundo escuro</h3><object class="crop" data="logo-vertical-completo-principal.CORRECTED.svg" type="image/svg+xml" id="crop-line1-after-dark" width="1500" height="126"></object></div>
+</div>
+
+<h2 class="section">C. Crop ampliado — "CIRURGIÃ-DENTISTA &amp; HOF"</h2>
+<div class="cropwrap">
+  <div class="croppanel light"><h3>ANTES · fundo claro</h3><object class="crop" data="logo-vertical-completo-principal.ORIGINAL.svg" type="image/svg+xml" id="crop-line2-before-light" width="1500" height="107"></object></div>
+  <div class="croppanel light"><h3>DEPOIS · fundo claro</h3><object class="crop" data="logo-vertical-completo-principal.CORRECTED.svg" type="image/svg+xml" id="crop-line2-after-light" width="1500" height="107"></object></div>
+</div>
+<div class="cropwrap">
+  <div class="croppanel dark"><h3>ANTES · fundo escuro</h3><object class="crop" data="logo-vertical-completo-principal.ORIGINAL.svg" type="image/svg+xml" id="crop-line2-before-dark" width="1500" height="107"></object></div>
+  <div class="croppanel dark"><h3>DEPOIS · fundo escuro</h3><object class="crop" data="logo-vertical-completo-principal.CORRECTED.svg" type="image/svg+xml" id="crop-line2-after-dark" width="1500" height="107"></object></div>
+</div>
+
+<script>
+  // viewBox de crop calculado a partir do bbox real de cada path (coords finais, sem transform aplicado a estes paths)
+  var LINE1_VB = "322.9 621.4 638.5 53.45";   // BY DRA. VALÉRIA OLIVEIRA
+  var LINE2_VB = "411 685 447.9 31.9";        // CIRURGIÃ-DENTISTA & HOF
+
+  function applyViewBox(objId, viewBox) {
+    var obj = document.getElementById(objId);
+    obj.addEventListener('load', function () {
+      var svg = obj.contentDocument.querySelector('svg');
+      if (svg) svg.setAttribute('viewBox', viewBox);
+    });
+  }
+
+  ['crop-line1-before-light', 'crop-line1-after-light', 'crop-line1-before-dark', 'crop-line1-after-dark']
+    .forEach(function (id) { applyViewBox(id, LINE1_VB); });
+
+  ['crop-line2-before-light', 'crop-line2-after-light', 'crop-line2-before-dark', 'crop-line2-after-dark']
+    .forEach(function (id) { applyViewBox(id, LINE2_VB); });
+</script>
+
+</body>
+</html>
