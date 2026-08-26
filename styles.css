@@ -902,7 +902,7 @@ button:focus-visible {
    esticada) -- por isso o texto usa os tokens de leitura normais, não os
    -inverse. */
 .services__pillars-wrap {
-  width: min(420px, 100%);
+  width: min(420px, 42vh, 100%);
 }
 
 .services__pillars {
@@ -940,6 +940,13 @@ button:focus-visible {
   aspect-ratio: 1 / 1;
   max-width: none;
   flex: 0 0 auto;
+}
+
+/* Foto de Estética do Sorriso é paisagem (1280x906); mantém a proporção
+   real do arquivo em vez do recorte quadrado padrão, evitando cortar o
+   sorriso nas laterais. */
+.services__media--sorriso {
+  aspect-ratio: 1280 / 906;
 }
 
 .services__pillar-copy {
@@ -1093,9 +1100,10 @@ button:focus-visible {
    Serviços — tablet retrato+ e desktop
    ========================================================= */
 
-/* O post tem altura própria (foto quadrada + legenda), então a seção só
-   precisa de espaço mínimo para centralizá-lo verticalmente -- sem travar
-   a altura do card a vh, o que voltaria a espremer/esticar a legenda. */
+/* O post tem altura própria (foto + legenda); .services__pillars-wrap já
+   limita a largura do post a 42vh (ver regra acima), o que encolhe foto e
+   legenda proporcionalmente em telas baixas -- por isso a seção pode travar
+   a altura em 100dvh no desktop (abaixo) sem espremer o card. */
 @media (min-width: 768px) {
   .services {
     min-height: 100dvh;
@@ -1130,6 +1138,15 @@ button:focus-visible {
 
   .services__procedures li {
     padding: var(--space-1) 0;
+  }
+}
+
+/* Desktop: a seção deve caber em exatamente uma tela, sem overflow --
+   mesmo tratamento do .about (ver abaixo). Só é seguro aqui porque o post
+   já encolhe com a viewport (42vh, regra acima). */
+@media (min-width: 1280px) {
+  .services {
+    height: 100dvh;
   }
 }
 
@@ -1353,17 +1370,17 @@ button:focus-visible {
 
 .experience__media {
   grid-area: media;
-  aspect-ratio: 16 / 10;
+  display: flex;
+  flex-direction: row;
+  gap: var(--space-4);
 }
 
-.experience__media .media-placeholder {
-  width: 100%;
-  height: 100%;
+.experience__media-placeholder {
+  flex: 1 1 0;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
 }
 
-/* Preparada para a fotografia real: troque a div .media-placeholder por
-   <img class="experience__photo">. object-position é o único ajuste
-   necessário depois, sem reconstruir a seção. */
 .experience__photo {
   display: block;
   width: 100%;
@@ -1489,7 +1506,13 @@ button:focus-visible {
   }
 
   .experience__media {
-    aspect-ratio: 4 / 3;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .experience__media-placeholder {
+    flex: 1 1 auto;
+    aspect-ratio: 3 / 4;
   }
 
   .experience__concepts {
