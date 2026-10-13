@@ -64,17 +64,43 @@
   var dots = document.querySelectorAll('.services__pillars-dot');
   var prevArrow = document.querySelector('.services__pillars-arrow--prev');
   var nextArrow = document.querySelector('.services__pillars-arrow--next');
+  var slides = document.querySelectorAll('.services__pillar-content');
 
   if (!pillars || !dots.length) return;
 
   var ticking = false;
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var carouselQuery = window.matchMedia('(min-width: 768px)');
 
   function goToIndex(index) {
     pillars.scrollTo({
       left: index * pillars.clientWidth,
       behavior: reduceMotion ? 'auto' : 'smooth'
     });
+  }
+
+  // Cada slide (Sorriso/Facial) tem sua própria altura natural (foto +
+  // legenda); em vez de esticar os dois para a altura do mais alto (o que
+  // deixa um vazio embaixo do mais curto), a altura da faixa acompanha só
+  // o slide ativo. .services__media e .services__pillar-copy não têm
+  // flex-grow, então a altura deles reflete sempre o conteúdo real, mesmo
+  // quando o post pai está esticado pelo layout padrão do flex.
+  function measureSlideHeight(slide) {
+    var media = slide.querySelector('.services__media');
+    var copy = slide.querySelector('.services__pillar-copy');
+    return (media ? media.offsetHeight : 0) + (copy ? copy.offsetHeight : 0);
+  }
+
+  function syncPillarsHeight(index) {
+    // Abaixo de 768px os dois pilares ficam empilhados (sem carrossel,
+    // ver CSS) -- a altura precisa ficar livre para caber os dois.
+    if (!carouselQuery.matches) {
+      pillars.style.height = '';
+      return;
+    }
+    var slide = slides[index];
+    if (!slide) return;
+    pillars.style.height = measureSlideHeight(slide) + 'px';
   }
 
   function updateActiveState() {
@@ -86,6 +112,7 @@
     });
     if (prevArrow) prevArrow.hidden = index === 0;
     if (nextArrow) nextArrow.hidden = index === dots.length - 1;
+    syncPillarsHeight(index);
   }
 
   pillars.addEventListener('scroll', function () {
@@ -113,6 +140,13 @@
       goToIndex(Math.min(dots.length - 1, index + 1));
     });
   }
+
+  window.addEventListener('resize', function () {
+    var index = Math.round(pillars.scrollLeft / pillars.clientWidth);
+    syncPillarsHeight(index);
+  });
+
+  syncPillarsHeight(0);
 })();
 
 (function () {

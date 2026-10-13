@@ -823,13 +823,14 @@ button:focus-visible {
 }
 
 .services__eyebrow {
+  font-size: 17.5px;
   margin-bottom: var(--space-4);
 }
 
 .services__headline {
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: clamp(1.75rem, 1.4rem + 1.4vw, 2.5rem);
+  font-size: clamp(2.36rem, 1.89rem + 1.89vw, 3.38rem);
   line-height: 1.2;
   color: var(--text-primary);
   max-width: 28ch;
@@ -839,7 +840,7 @@ button:focus-visible {
 .services__intro-text {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: 16px;
+  font-size: 1.35rem;
   line-height: 1.6;
   color: var(--text-secondary);
 }
@@ -897,14 +898,14 @@ button:focus-visible {
 /* Carrossel de 1 "post" por vez: os dois pilares (Sorriso/Facial) vivem no
    mesmo cartão, alternando por swipe (touch/trackpad) ou pelos controles de
    seta/pontos abaixo (fora da foto, ver .services__pillars-controls).
-   Formato editorial no estilo post do Instagram: foto quadrada em cima,
-   legenda em baixo, largura própria centralizada dentro da coluna (não
-   esticada) -- por isso o texto usa os tokens de leitura normais, não os
-   -inverse. */
+   O card preenche 100% da largura da coluna -- ver relatório desta rodada. */
 .services__pillars-wrap {
-  width: min(420px, 42vh, 100%);
+  width: 100%;
 }
 
+/* Altura ajustada por JS para o slide ativo (script.js), em vez de esticar
+   os dois pilares para a altura do mais alto -- evita o vazio embaixo do
+   slide mais curto (ver relatório desta rodada). */
 .services__pillars {
   display: flex;
   flex-direction: row;
@@ -913,6 +914,12 @@ button:focus-visible {
   scroll-snap-type: x mandatory;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .services__pillars {
+    transition: height 0.35s ease;
+  }
 }
 
 .services__pillars::-webkit-scrollbar {
@@ -930,23 +937,19 @@ button:focus-visible {
 
 .services__post {
   width: 100%;
-  max-width: 420px;
   display: flex;
   flex-direction: column;
 }
 
+/* Sorriso e Facial usam a mesma proporção (720x900, de hof.jpeg) para que
+   os dois cards do carrossel tenham exatamente o mesmo tamanho -- ver
+   relatório desta rodada. */
 .services__media--secondary {
   width: 100%;
-  aspect-ratio: 1 / 1;
+  aspect-ratio: 720 / 900;
   max-width: none;
   flex: 0 0 auto;
-}
-
-/* Foto de Estética do Sorriso é paisagem (1280x906); mantém a proporção
-   real do arquivo em vez do recorte quadrado padrão, evitando cortar o
-   sorriso nas laterais. */
-.services__media--sorriso {
-  aspect-ratio: 1280 / 906;
+  min-height: 0;
 }
 
 .services__pillar-copy {
@@ -1100,10 +1103,10 @@ button:focus-visible {
    Serviços — tablet retrato+ e desktop
    ========================================================= */
 
-/* O post tem altura própria (foto + legenda); .services__pillars-wrap já
-   limita a largura do post a 42vh (ver regra acima), o que encolhe foto e
-   legenda proporcionalmente em telas baixas -- por isso a seção pode travar
-   a altura em 100dvh no desktop (abaixo) sem espremer o card. */
+/* O post preenche 100% da largura da coluna (ver .services__pillars-wrap),
+   então a seção tem altura livre, do tamanho do próprio card -- min-height
+   só garante um piso em telas altas, sem travar em 100dvh (ver relatório
+   desta rodada). */
 @media (min-width: 768px) {
   .services {
     min-height: 100dvh;
@@ -1115,8 +1118,12 @@ button:focus-visible {
     padding-block: var(--space-5);
   }
 
+  .services__pillars-wrap {
+    width: 60%;
+  }
+
   .services__headline {
-    font-size: clamp(1.375rem, 1.1rem + 0.9vw, 1.75rem);
+    font-size: clamp(1.86rem, 1.49rem + 1.22vw, 2.36rem);
     margin-bottom: var(--space-3);
   }
 
@@ -1138,15 +1145,6 @@ button:focus-visible {
 
   .services__procedures li {
     padding: var(--space-1) 0;
-  }
-}
-
-/* Desktop: a seção deve caber em exatamente uma tela, sem overflow --
-   mesmo tratamento do .about (ver abaixo). Só é seguro aqui porque o post
-   já encolhe com a viewport (42vh, regra acima). */
-@media (min-width: 1280px) {
-  .services {
-    height: 100dvh;
   }
 }
 
